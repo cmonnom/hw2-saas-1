@@ -11,6 +11,8 @@ helper_method :sort_movies
   def index
     if params[:sorted_by_title] == 'yes'
       @movies = Movie.order("title").all
+    elsif params[:sorted_by_date] == 'yes'
+      @movies = Movie.order("release_date").all
     else
       @movies = Movie.all
     end
@@ -42,10 +44,5 @@ helper_method :sort_movies
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
-  end
-
-  def sort_movies
-#@movies = Movie.order("title").all
-    
   end
 end

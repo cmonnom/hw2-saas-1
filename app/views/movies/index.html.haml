@@ -6,7 +6,7 @@
     %tr
       %th= link_to "Movie Title", :action => :index, :sorted_by_title => 'yes'
       %th Rating
-      %th Release Date
+      %th= link_to "Release Date", :action => :index, :sorted_by_date => 'yes'
       %th More Info
   %tbody
     - @movies.each do |movie|
@@ -17,6 +17,3 @@
         %td= link_to "More about #{movie.title}", movie_path(movie)
 
 = link_to 'Add new movie', new_movie_path
-= params.inspect
-"Value test: "
-=params[:test]
