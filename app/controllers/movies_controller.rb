@@ -11,7 +11,7 @@ helper_method :sort_movies
   def index
     if !params[:sorted_by].nil? and ["title", "release_date"].include?(params[:sorted_by])
       @movies = Movie.order(params[:sorted_by]).all
-      instance_variable_set("@#{params[:sorted_by]}_css", 'hilite')
+      instance_variable_set("@#{params[:sorted_by]}_header", 'hilite')
     else params[:sorted_by].nil?
       @movies = Movie.all
       @class = ''
