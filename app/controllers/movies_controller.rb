@@ -9,12 +9,12 @@ helper_method :sort_movies
   end
 
   def index
-    if params[:sorted_by_title] == 'yes'
-      @movies = Movie.order("title").all
-    elsif params[:sorted_by_date] == 'yes'
-      @movies = Movie.order("release_date").all
-    else
+    if !params[:sorted_by].nil? and ["title", "release_date"].include?(params[:sorted_by])
+      @movies = Movie.order(params[:sorted_by]).all
+      instance_variable_set("@#{params[:sorted_by]}_css", 'hilite')
+    else params[:sorted_by].nil?
       @movies = Movie.all
+      @class = ''
     end
   end
 
