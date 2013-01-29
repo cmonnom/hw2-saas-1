@@ -62,6 +62,7 @@ helper_method :sort_movies
     @saved_params = Hash.new if @saved_params.nil?
     @saved_params[:sorted_by] = session[:sorted_by] if !session[:sorted_by].nil?
     @saved_params[:ratings] = session[:ratings] if !session[:ratings].nil?
+    flash.keep
     redirect_to movies_path(@saved_params) if !params_equal?
   end
 
