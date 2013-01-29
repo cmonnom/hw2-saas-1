@@ -9,12 +9,17 @@ helper_method :sort_movies
   end
 
   def index
+    @all_ratings = Movie.ratings
+    if !params[:ratings].nil?
+      @filter_by = params[:ratings].keys
+    else
+      @filter_by = @all_ratings
+    end
     if !params[:sorted_by].nil? and ["title", "release_date"].include?(params[:sorted_by])
-      @movies = Movie.order(params[:sorted_by]).all
+      @movies = Movie.order(params[:sorted_by]).where(:rating => @filter_by)
       instance_variable_set("@#{params[:sorted_by]}_header", 'hilite')
     else params[:sorted_by].nil?
-      @movies = Movie.all
-      @class = ''
+      @movies = Movie.where(:rating => @filter_by)
     end
   end
 
@@ -45,4 +50,9 @@ helper_method :sort_movies
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+  
+  def filter(temp_result)
+    temp_result.where(:rating => @filter_by)
+  end
+
 end
