@@ -9,6 +9,7 @@ helper_method :sort_movies
   end
 
   def index
+    restore_session
     @all_ratings = Movie.ratings
     if !params[:ratings].nil?
       @filter_by = params[:ratings].keys
@@ -21,6 +22,7 @@ helper_method :sort_movies
     else params[:sorted_by].nil?
       @movies = Movie.where(:rating => @filter_by)
     end
+    save_session
   end
 
   def new
@@ -51,8 +53,22 @@ helper_method :sort_movies
     redirect_to movies_path
   end
   
-  def filter(temp_result)
-    temp_result.where(:rating => @filter_by)
+  def save_session
+    session[:sorted_by] = params[:sorted_by]if !params[:sorted_by].nil?
+    session[:ratings] = params[:ratings] if !params[:ratings].nil?
+  end
+  
+  def restore_session
+    @saved_params = Hash.new if @saved_params.nil?
+    @saved_params[:sorted_by] = session[:sorted_by] if !session[:sorted_by].nil?
+    @saved_params[:ratings] = session[:ratings] if !session[:ratings].nil?
+    redirect_to movies_path(@saved_params) if !params_equal?
   end
 
+  def params_equal?
+    @equals = true
+    @equals &= @saved_params[:sorted_by] == params[:sorted_by] if params[:sorted_by].nil?
+    @equals &= @saved_params[:ratings] == params[:ratings] if params[:ratings].nil?
+    @equals
+  end
 end
